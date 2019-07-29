@@ -9,6 +9,7 @@
 import Foundation
 
 struct MovieModel {
+    let id: Int
     let thumbnail: URL?
     let title: String
     let synopsis: String

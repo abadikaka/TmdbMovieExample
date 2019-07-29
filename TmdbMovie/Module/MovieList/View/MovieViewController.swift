@@ -17,7 +17,7 @@ final class MovieViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        buttonLabel.text = "Sort By Popularity"
+        buttonLabel.text = "Now: Sort By Popularity -- Click for change"
         setupCollectionView()
         viewModel.delegate = self
         viewModel.action.loadFirstPage()
@@ -36,14 +36,14 @@ final class MovieViewController: UIViewController {
     
     @IBAction func handleButtonClicked(_ sender: Any) {
         if viewModel.datasource.currentSortType == .popularity {
-            buttonLabel.text = "Sort By Rating"
+            buttonLabel.text = "Now: Sort By Rating -- Click for change"
             viewModel.action.sort(by: .rating)
         } else {
-            buttonLabel.text = "Sort By Popularity"
+            buttonLabel.text = "Now: Sort By Popularity -- Click for change"
             viewModel.action.sort(by: .popularity)
         }
     }
-    
+
 }
 
 // MARK: UICollectionViewDelegate
@@ -66,6 +66,11 @@ extension MovieViewController: UICollectionViewDelegate {
             break
         case .movie(let models):
             let item = models[indexPath.row]
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            guard let controller = storyboard.instantiateViewController(withIdentifier: "MovieDetailViewController") as? MovieDetailViewController else { return }
+            controller.setup(information: item)
+            navigationController?.pushViewController(controller, animated: true)
+            
         }
     }
 }

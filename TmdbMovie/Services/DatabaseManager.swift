@@ -21,12 +21,14 @@ enum DataType {
     }
 }
 
+/// protocol for define database abilities
 protocol DatabaseHandler {
     var context: NSManagedObjectContext? { get }
     func database(_ handler: DatabaseHandler, willSaveData data: DataType)
     func database(_ handler: DatabaseHandler, willRetrieveData data: DataType)
 }
 
+/// Class for handling the database transaction
 class DatabaseManager: DatabaseHandler {
 
     var context: NSManagedObjectContext? {
@@ -40,6 +42,7 @@ class DatabaseManager: DatabaseHandler {
     
     func database(_ handler: DatabaseHandler, willSaveData data: DataType) {
         guard let context = context else { return }
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         let entity = NSEntityDescription.entity(forEntityName: data.entityDescription, in: context)
         switch data {
         case .movie(let movie):
@@ -89,6 +92,7 @@ class DatabaseManager: DatabaseHandler {
     
     func saveContext () {
         let context = persistentContainer.viewContext
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         if context.hasChanges {
             do {
                 try context.save()

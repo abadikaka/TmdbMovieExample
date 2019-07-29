@@ -14,12 +14,14 @@ final class MovieDatabaseManager: DatabaseManager {
     
     func makeModel() -> [MovieModel] {
         guard let context = context else { return [] }
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Movies")
         request.returnsObjectsAsFaults = false
         var models: [MovieModel] = []
         do {
             let result = try context.fetch(request)
             for data in result as! [NSManagedObject] {
+                let id = data.value(forKey: "id") as? NSNumber ?? 0
                 let title = data.value(forKey: "original_title") as? String ?? ""
                 let overview = data.value(forKey: "overview") as? String ?? ""
                 let rating = data.value(forKey: "vote_average") as? NSNumber ?? 0
@@ -27,7 +29,7 @@ final class MovieDatabaseManager: DatabaseManager {
                 let isFavorite = data.value(forKey: "isFavorite") as? Bool ?? false
                 let posterPath = data.value(forKey: "poster_path") as? String ?? ""
                 let thumbnail = URL(string: "\(TmdbConfig.imageBaseUrl)\(posterPath)")
-                let model = MovieModel(thumbnail: thumbnail, title: title, synopsis: overview, rating: Int(truncating: rating), releaseDate: releaseDate, isFavorite: isFavorite)
+                let model = MovieModel(id: Int(truncating: id), thumbnail: thumbnail, title: title, synopsis: overview, rating: Int(truncating: rating), releaseDate: releaseDate, isFavorite: isFavorite)
                 models.append(model)
             }
             return models
@@ -37,10 +39,11 @@ final class MovieDatabaseManager: DatabaseManager {
         return []
     }
     
-    func setFavorite(_ id: String) {
+    func setFavorite(_ id: Int) {
         guard let context = context else { return }
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Movies")
-        request.predicate = NSPredicate(format: "id = %@", id)
+        request.predicate = NSPredicate(format: "id = %d", id)
         request.returnsObjectsAsFaults = false
         do {
             let result = try context.fetch(request)
@@ -60,6 +63,24 @@ final class MovieDatabaseManager: DatabaseManager {
             let movie = Movie(response: item)
             database(self, willSaveData: .movie(data: movie))
         }
+    }
+    
+    func favoriteStatus(forMovieId id: Int) -> Bool {
+        guard let context = context else { return false }
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Movies")
+        request.predicate = NSPredicate(format: "id = %d", id)
+        request.returnsObjectsAsFaults = false
+        do {
+            let result = try context.fetch(request)
+            for data in result as! [NSManagedObject] {
+                let favorite = data.value(forKey: "isFavorite") as? Bool ?? false
+                return favorite
+            }
+        } catch {
+            print("Failed")
+        }
+        return false
     }
     
 }
@@ -98,6 +119,9 @@ final class MovieController: BaseController {
     var models: [MovieModel] = []
     
     func loadData(withPage page: Int) {
+        if page == 1 {
+            models = []
+        }
         guard !isLoading else { return }
         isLoading = true
         let request = MovieListRequest(sortBy: sortType, pages: page)
@@ -118,8 +142,9 @@ extension MovieController: NetworkManagerObserver {
         guard let results = response["results"] as? [[String: Any]] else { return }
         for item in results {
             let movie = Movie(response: item)
+            let favorite = databaseManager.favoriteStatus(forMovieId: movie.id ?? 0)
             let thumbnail = URL(string: "\(TmdbConfig.imageBaseUrl)\(movie.posterPath ?? "")")
-            models.append(MovieModel(thumbnail: thumbnail, title: movie.originalTitle ?? "", synopsis: movie.overview ?? "", rating: Int(truncating: movie.voteAverage ?? 0), releaseDate: movie.releaseDate ?? "", isFavorite: movie.favorite))
+            models.append(MovieModel(id: movie.id ?? 0, thumbnail: thumbnail, title: movie.originalTitle ?? "", synopsis: movie.overview ?? "", rating: Int(truncating: movie.voteAverage ?? 0), releaseDate: movie.releaseDate ?? "", isFavorite: favorite))
         }
         databaseManager.saveResponse(response)
         delegate?.movieController(self, withModel: models)
