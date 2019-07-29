@@ -89,14 +89,13 @@ final class MovieController: BaseController {
     
     var sortType: MovieListRequest.SortType = .popularity {
         didSet {
+            models = []
             page = 1
             loadData(withPage: page)
         }
     }
     
-    var models: [MovieModel] {
-        return databaseManager.makeModel()
-    }
+    var models: [MovieModel] = []
     
     func loadData(withPage page: Int) {
         guard !isLoading else { return }
@@ -116,7 +115,6 @@ extension MovieController: NetworkManagerObserver {
     func networkManager(_ manager: NetworkManager?, didRetrieveDataWith response: Any) {
         isLoading = false
         guard let response = response as? [String: Any] else { return }
-        var models: [MovieModel] = []
         guard let results = response["results"] as? [[String: Any]] else { return }
         for item in results {
             let movie = Movie(response: item)
