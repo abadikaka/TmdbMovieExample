@@ -56,10 +56,10 @@ final class MovieViewModel: MovieViewModelType {
         controller.delegate = self
     }
     
-    private func updateDataSource() {
+    private func updateDataSource(model: [MovieModel]) {
         var newDatasourceItems: [MovieContentItem] = []
                 
-        let media = mediaAttributes
+        let media = getMovieAttributes(models: model)
         if media.canAddMedia {
             newDatasourceItems += media.items
         }
@@ -74,10 +74,10 @@ final class MovieViewModel: MovieViewModelType {
         }
     }
     
-    private var mediaAttributes: (canAddMedia: Bool, items: [MovieContentItem]) {
-        guard !controller.models.isEmpty else { return (false, []) }
+    private func getMovieAttributes(models: [MovieModel]) -> (canAddMedia: Bool, items: [MovieContentItem]){
+        guard !models.isEmpty else { return (false, []) }
         var items: [MovieContentItem] = []
-        items.append(.movie(controller.models))
+        items.append(.movie(models))
         return (true, items)
     }
 
@@ -132,8 +132,8 @@ extension MovieViewModel: MovieViewModelDatasource {
 
 extension MovieViewModel: MovieControllerDelegate {
     
-    func movieControllerDidReloadData(_ controller: MovieController) {
-        updateDataSource()
+    func movieController(_ controller: MovieController, withModel model: [MovieModel]) {
+        updateDataSource(model: model)
     }
     
 }

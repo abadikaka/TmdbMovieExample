@@ -65,7 +65,7 @@ final class MovieDatabaseManager: DatabaseManager {
 }
 
 protocol MovieControllerDelegate: AnyObject {
-    func movieControllerDidReloadData(_ controller: MovieController)
+    func movieController(_ controller: MovieController, withModel model: [MovieModel])
 }
 
 /// Class for control data flow in the movie modules
@@ -89,8 +89,8 @@ final class MovieController: BaseController {
     
     var sortType: MovieListRequest.SortType = .popularity {
         didSet {
-            page = 0
-            loadData(withPage: 0)
+            page = 1
+            loadData(withPage: page)
         }
     }
     
@@ -102,7 +102,10 @@ final class MovieController: BaseController {
         guard !isLoading else { return }
         isLoading = true
         let request = MovieListRequest(sortBy: sortType, pages: page)
-        networkManager.network(self, willSendRequest: request, method: .get)
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.networkManager.network(strongSelf, willSendRequest: request, method: .get)
+        }
     }
     
 }
@@ -113,8 +116,15 @@ extension MovieController: NetworkManagerObserver {
     func networkManager(_ manager: NetworkManager?, didRetrieveDataWith response: Any) {
         isLoading = false
         guard let response = response as? [String: Any] else { return }
+        var models: [MovieModel] = []
+        guard let results = response["results"] as? [[String: Any]] else { return }
+        for item in results {
+            let movie = Movie(response: item)
+            let thumbnail = URL(string: "\(TmdbConfig.imageBaseUrl)\(movie.posterPath ?? "")")
+            models.append(MovieModel(thumbnail: thumbnail, title: movie.originalTitle ?? "", synopsis: movie.overview ?? "", rating: Int(truncating: movie.voteAverage ?? 0), releaseDate: movie.releaseDate ?? "", isFavorite: movie.favorite))
+        }
         databaseManager.saveResponse(response)
-        delegate?.movieControllerDidReloadData(self)
+        delegate?.movieController(self, withModel: models)
     }
     
 }

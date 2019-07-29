@@ -17,26 +17,31 @@ class MovieViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         imageView.backgroundColor = .lightGray
+        spinner.isHidden = false
         spinner.startAnimating()
     }
 
     func configCell(model: MovieModel) {
-        guard let url = model.thumbnail else {
-            spinner.stopAnimating()
-            return
-        }
-        spinner.isHidden = false
-        do {
-            let data = try Data(contentsOf: url)
-            DispatchQueue.main.async {
-                self.imageView.image = UIImage(data: data)
-                self.spinner.stopAnimating()
-                self.spinner.isHidden = true
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            guard let url = model.thumbnail else {
+                DispatchQueue.main.async { [weak self] in
+                    self?.spinner.stopAnimating()
+                }
+                return
             }
-        } catch {
-            spinner.stopAnimating()
+            do {
+                let data = try Data(contentsOf: url)
+                DispatchQueue.main.async { [weak self] in
+                    self?.imageView.image = UIImage(data: data)
+                    self?.spinner.stopAnimating()
+                    self?.spinner.isHidden = true
+                }
+            } catch {
+                DispatchQueue.main.async { [weak self] in
+                    self?.spinner.stopAnimating()
+                }
+            }
         }
-        
     }
     
 }

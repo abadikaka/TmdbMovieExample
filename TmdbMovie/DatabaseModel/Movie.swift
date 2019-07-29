@@ -23,7 +23,7 @@ class Movie {
     let voteCount: Int?
     let video: Bool?
     let voteAverage: NSNumber?
-    
+    let favorite: Bool
     
     init(posterPath: String?,
          adult: Bool?,
@@ -38,7 +38,8 @@ class Movie {
          popularity: NSNumber?,
          voteCount: Int?,
          video: Bool?,
-         voteAverage: NSNumber?) {
+         voteAverage: NSNumber?,
+         favorite: Bool = false) {
         self.posterPath = posterPath
         self.adult = adult
         self.overview = overview
@@ -53,6 +54,7 @@ class Movie {
         self.voteCount = voteCount
         self.video = video
         self.voteAverage = voteAverage
+        self.favorite = favorite
     }
     
     init(response: [String: Any]) {
@@ -70,6 +72,7 @@ class Movie {
         self.voteCount = response["vote_count"] as? Int
         self.video = response["video"] as? Bool
         self.voteAverage = response["vote_average"] as? NSNumber
+        self.favorite = false
     }
     
 }
