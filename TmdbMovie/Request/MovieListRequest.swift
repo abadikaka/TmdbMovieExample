@@ -19,7 +19,7 @@ class MovieListRequest: BaseRequest {
             case .popularity:
                 return "popularity.desc"
             case .rating:
-                return "vote_count.desc"
+                return "vote_average.desc"
             }
         }
     }

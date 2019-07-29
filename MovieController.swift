@@ -101,7 +101,7 @@ final class MovieController: BaseController {
     func loadData(withPage page: Int) {
         guard !isLoading else { return }
         isLoading = true
-        let request = MovieListRequest(sortBy: .popularity, pages: page)
+        let request = MovieListRequest(sortBy: sortType, pages: page)
         networkManager.network(self, willSendRequest: request, method: .get)
     }
     
