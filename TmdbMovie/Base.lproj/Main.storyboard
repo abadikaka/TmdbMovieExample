@@ -13,7 +13,7 @@
         <!--TMDB Movie-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="TmdbMovie" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="MovieViewController" customModule="TmdbMovie" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -29,6 +29,9 @@
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JXv-op-ooK">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="44"/>
+                                        <connections>
+                                            <action selector="handleButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bt4-Qj-E2v"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -44,10 +47,9 @@
                                     <constraint firstAttribute="height" constant="44" id="lBQ-8F-qLa"/>
                                 </constraints>
                             </view>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="agc-iG-0DY">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="agc-iG-0DY">
                                 <rect key="frame" x="20" y="201" width="374" height="661"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9gx-z3-xlj">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -55,7 +57,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="any-XV-FV6">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="any-XV-FV6" customClass="MovieViewCell" customModule="TmdbMovie" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -68,13 +70,21 @@
                         </subviews>
                         <color key="backgroundColor" red="0.17254901960784313" green="0.24313725490196078" blue="0.31372549019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="agc-iG-0DY" secondAttribute="trailing" constant="20" id="6lf-Wz-ERF"/>
+                            <constraint firstItem="agc-iG-0DY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="AYm-Af-0KM"/>
                             <constraint firstItem="bDG-wS-Hwi" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="27" id="DmJ-UB-5DK"/>
+                            <constraint firstItem="agc-iG-0DY" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="dxG-Qq-hcB"/>
                             <constraint firstItem="bDG-wS-Hwi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="fHO-vA-BFC"/>
+                            <constraint firstItem="agc-iG-0DY" firstAttribute="top" secondItem="bDG-wS-Hwi" secondAttribute="bottom" constant="42" id="sPL-7o-zjK"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="bDG-wS-Hwi" secondAttribute="trailing" constant="20" id="udg-ak-j1Z"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="TMDB Movie" id="oKg-qG-H2r"/>
+                    <connections>
+                        <outlet property="buttonLabel" destination="DQj-mp-sbZ" id="pAx-H9-cqe"/>
+                        <outlet property="collectionView" destination="agc-iG-0DY" id="EgN-tq-e8h"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

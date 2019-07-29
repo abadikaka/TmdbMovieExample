@@ -25,7 +25,7 @@ class MovieListRequest: BaseRequest {
     }
     
     var endpoint: String {
-        return "/discover/movie?api_key=\(TmdbConfig.apiKey_v3)&language=en-US&sort_by=\(sortBy.additionalParams)&page=\(pages)"
+        return "\(TmdbConfig.baseUrl)/3/discover/movie?api_key=\(TmdbConfig.apiKey_v3)&language=en-US&sort_by=\(sortBy.additionalParams)&page=\(pages)"
     }
     
     var params: ParametersDict? = nil

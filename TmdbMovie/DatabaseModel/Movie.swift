@@ -55,5 +55,21 @@ class Movie {
         self.voteAverage = voteAverage
     }
     
+    init(response: [String: Any]) {
+        self.posterPath = response["poster_path"] as? String
+        self.adult = response["adult"] as? Bool
+        self.overview = response["overview"] as? String
+        self.releaseDate = response["release_date"] as? String
+        self.genreIds = response["genre_ids"] as? [Int]
+        self.id = response["id"] as? Int
+        self.originalTitle = response["original_title"] as? String
+        self.originalLanguage = response["original_language"] as? String
+        self.title = response["title"] as? String
+        self.backdropPath = response["backdrop_path"] as? String
+        self.popularity = response["popularity"] as? NSNumber
+        self.voteCount = response["vote_count"] as? Int
+        self.video = response["video"] as? Bool
+        self.voteAverage = response["vote_average"] as? NSNumber
+    }
     
 }

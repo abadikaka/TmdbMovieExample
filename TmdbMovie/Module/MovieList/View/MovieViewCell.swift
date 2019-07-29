@@ -15,4 +15,8 @@ class MovieViewCell: UICollectionViewCell {
         // Initialization code
     }
 
+    func configCell(model: MovieModel) {
+        
+    }
+    
 }

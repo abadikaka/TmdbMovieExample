@@ -24,6 +24,8 @@
 		45AD038122E88091007E3AE0 /* MovieViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AD037F22E88091007E3AE0 /* MovieViewCell.swift */; };
 		45AD038222E88091007E3AE0 /* MovieViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45AD038022E88091007E3AE0 /* MovieViewCell.xib */; };
 		45AD038A22E88A2C007E3AE0 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AD038922E88A2C007E3AE0 /* DatabaseManager.swift */; };
+		A701D88C22EEC2A100DE47C3 /* TmdbMovie.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A701D88A22EEC2A100DE47C3 /* TmdbMovie.xcdatamodeld */; };
+		A701D88E22EECE5100DE47C3 /* MovieController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A701D88D22EECE5100DE47C3 /* MovieController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +60,8 @@
 		45AD037F22E88091007E3AE0 /* MovieViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieViewCell.swift; sourceTree = "<group>"; };
 		45AD038022E88091007E3AE0 /* MovieViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieViewCell.xib; sourceTree = "<group>"; };
 		45AD038922E88A2C007E3AE0 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		A701D88B22EEC2A100DE47C3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		A701D88D22EECE5100DE47C3 /* MovieController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +85,7 @@
 		459235B022E76730002D8967 = {
 			isa = PBXGroup;
 			children = (
+				A701D88A22EEC2A100DE47C3 /* TmdbMovie.xcdatamodeld */,
 				459235BB22E76730002D8967 /* TmdbMovie */,
 				459235D022E76731002D8967 /* TmdbMovieTests */,
 				459235BA22E76730002D8967 /* Products */,
@@ -197,7 +202,6 @@
 		459235EB22E76DC9002D8967 /* Module */ = {
 			isa = PBXGroup;
 			children = (
-				45AD038322E882EC007E3AE0 /* MovieDetail */,
 				459235E322E76CF5002D8967 /* MovieList */,
 			);
 			path = Module;
@@ -211,40 +215,10 @@
 			path = DatabaseModel;
 			sourceTree = "<group>";
 		};
-		45AD038322E882EC007E3AE0 /* MovieDetail */ = {
-			isa = PBXGroup;
-			children = (
-				45AD038722E88A08007E3AE0 /* Controller */,
-				45AD038522E8830F007E3AE0 /* View */,
-				45AD038422E88309007E3AE0 /* ViewModel */,
-			);
-			path = MovieDetail;
-			sourceTree = "<group>";
-		};
-		45AD038422E88309007E3AE0 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		45AD038522E8830F007E3AE0 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 		45AD038622E889FF007E3AE0 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
-		45AD038722E88A08007E3AE0 /* Controller */ = {
-			isa = PBXGroup;
-			children = (
+				A701D88D22EECE5100DE47C3 /* MovieController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -362,6 +336,8 @@
 				45AD038A22E88A2C007E3AE0 /* DatabaseManager.swift in Sources */,
 				459235BF22E76730002D8967 /* ViewController.swift in Sources */,
 				459235BD22E76730002D8967 /* AppDelegate.swift in Sources */,
+				A701D88C22EEC2A100DE47C3 /* TmdbMovie.xcdatamodeld in Sources */,
+				A701D88E22EECE5100DE47C3 /* MovieController.swift in Sources */,
 				459235E222E76C12002D8967 /* TmdbConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -629,6 +605,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		A701D88A22EEC2A100DE47C3 /* TmdbMovie.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A701D88B22EEC2A100DE47C3 /* Model.xcdatamodel */,
+			);
+			currentVersion = A701D88B22EEC2A100DE47C3 /* Model.xcdatamodel */;
+			path = TmdbMovie.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 459235B122E76730002D8967 /* Project object */;
 }

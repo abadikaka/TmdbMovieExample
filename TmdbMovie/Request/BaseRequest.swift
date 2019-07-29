@@ -13,6 +13,11 @@ public typealias ParametersDict = [String : Any]
 // Define the header's dictionary
 public typealias HeadersDict = [String: String]
 
+enum HttpMethod: String {
+    case get = "GET"
+    case post = "POST"
+}
+
 protocol BaseRequest: AnyObject {
     var pages: Int { get }
     var endpoint: String { get }
