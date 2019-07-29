@@ -41,7 +41,7 @@ final class MovieViewModel: MovieViewModelType {
     
     weak var delegate: MovieViewModelDelegate?
     
-    private let controller: MovieController = MovieController()
+    private var controller: MovieController = MovieController()
     private var items: [MovieContentItem] = []
     
     var datasource: MovieViewModelDatasource {
@@ -52,20 +52,26 @@ final class MovieViewModel: MovieViewModelType {
         return self
     }
     
+    init() {
+        controller.delegate = self
+    }
+    
     private func updateDataSource() {
         var newDatasourceItems: [MovieContentItem] = []
-        
-        if (!controller.isLoading) {
-            newDatasourceItems += [.loading]
-        }
-        
+                
         let media = mediaAttributes
         if media.canAddMedia {
             newDatasourceItems += media.items
         }
         
+        if (!controller.isLoading) {
+            newDatasourceItems += [.loading]
+        }
+        
         items = newDatasourceItems
-        delegate?.movieViewModelDidReloadData(self)
+        DispatchQueue.main.async {
+            self.delegate?.movieViewModelDidReloadData(self)
+        }
     }
     
     private var mediaAttributes: (canAddMedia: Bool, items: [MovieContentItem]) {
@@ -120,6 +126,14 @@ extension MovieViewModel: MovieViewModelDatasource {
     
     func section(at indexPath: IndexPath) -> MovieContentItem {
         return items[indexPath.section]
+    }
+    
+}
+
+extension MovieViewModel: MovieControllerDelegate {
+    
+    func movieControllerDidReloadData(_ controller: MovieController) {
+        updateDataSource()
     }
     
 }

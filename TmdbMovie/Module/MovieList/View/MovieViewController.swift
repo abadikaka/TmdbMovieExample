@@ -13,12 +13,13 @@ final class MovieViewController: UIViewController {
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var buttonLabel: UILabel!
     
-    private let viewModel: MovieViewModelType = MovieViewModel()
+    private var viewModel: MovieViewModelType = MovieViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         buttonLabel.text = "Sort By Popularity"
         setupCollectionView()
+        viewModel.delegate = self
         viewModel.action.loadFirstPage()
     }
     
@@ -96,7 +97,12 @@ extension MovieViewController: UICollectionViewDataSource {
 extension MovieViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 120, height: 120)
+        ///
+        /// This one try to make the cell divided into 2 cells per row
+        ///
+        var width = (view.bounds.width - 40) / 2
+        width -= 4
+        return CGSize(width: width, height: width)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -109,4 +115,11 @@ extension MovieViewController: UICollectionViewDelegateFlowLayout {
     
 }
 
-
+// MARK: MovieViewModelDelegate
+extension MovieViewController: MovieViewModelDelegate {
+    
+    func movieViewModelDidReloadData(_ viewModel: MovieViewModelType) {
+        collectionView.reloadData()
+    }
+    
+}

@@ -20,7 +20,6 @@ final class MovieDatabaseManager: DatabaseManager {
         do {
             let result = try context.fetch(request)
             for data in result as! [NSManagedObject] {
-                print(data.value(forKey: "username") as! String)
                 let title = data.value(forKey: "original_title") as? String ?? ""
                 let overview = data.value(forKey: "overview") as? String ?? ""
                 let rating = data.value(forKey: "vote_average") as? NSNumber ?? 0
@@ -65,6 +64,10 @@ final class MovieDatabaseManager: DatabaseManager {
     
 }
 
+protocol MovieControllerDelegate: AnyObject {
+    func movieControllerDidReloadData(_ controller: MovieController)
+}
+
 /// Class for control data flow in the movie modules
 final class MovieController: BaseController {
     
@@ -73,6 +76,8 @@ final class MovieController: BaseController {
     private lazy var networkManager: NetworkManager = {
         return NetworkManager(observer: self)
     }()
+    
+    weak var delegate: MovieControllerDelegate?
     
     var isLoading: Bool = false
     
@@ -109,6 +114,7 @@ extension MovieController: NetworkManagerObserver {
         isLoading = false
         guard let response = response as? [String: Any] else { return }
         databaseManager.saveResponse(response)
+        delegate?.movieControllerDidReloadData(self)
     }
     
 }
